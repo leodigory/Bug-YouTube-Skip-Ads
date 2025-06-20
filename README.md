@@ -1,6 +1,6 @@
 # 🚀 Bug YouTube Skip Ads
 
-[![Version](https://img.shields.io/badge/version-1.1-blue.svg)](https://github.com/leodigory/Bug-YouTube-Skip-Ads)
+[![Version](https://img.shields.io/badge/version-1.2-blue.svg)](https://github.com/leodigory/Bug-YouTube-Skip-Ads)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-yellow.svg)](https://chrome.google.com/webstore)
 
@@ -20,6 +20,10 @@ A extensão detecta automaticamente quando você acessa um vídeo do YouTube e a
 - `youtube.com/watch?v=VIDEO_ID` → `youtube.com./watch?v=VIDEO_ID`
 
 Este simples truque faz com que o YouTube exiba o vídeo sem anúncios, como se você tivesse uma assinatura premium.
+
+<div align="center">
+  <img src="how-it-works.svg" alt="Como a Extensão Funciona" width="800" height="400">
+</div>
 
 ## ✨ Características
 
@@ -90,8 +94,10 @@ Bug-YouTube-Skip-Ads/
 ├── manifest.json      # Configuração da extensão
 ├── content.js         # Script principal
 ├── icon.svg          # Ícone da extensão
+├── how-it-works.svg  # Diagrama explicativo
 ├── LICENSE           # Licença MIT
 ├── INSTALACAO.md     # Guia de instalação detalhado
+├── DOWNLOAD.md       # Guia de download direto
 └── README.md         # Este arquivo
 ```
 
@@ -101,15 +107,16 @@ Bug-YouTube-Skip-Ads/
 {
   "manifest_version": 3,
   "name": "Bug YouTube Skip Ads @leodigory",
-  "version": "1.1",
+  "version": "1.2",
   "description": "Adiciona automaticamente um ponto aos URLs de vídeos do YouTube para pular anúncios",
-  "permissions": ["activeTab", "scripting", "storage"],
+  "permissions": ["storage"],
   "host_permissions": ["*://*.youtube.com/*"],
   "content_scripts": [
     {
       "matches": ["*://*.youtube.com/*"],
       "js": ["content.js"],
-      "run_at": "document_start"
+      "run_at": "document_start",
+      "all_frames": false
     }
   ]
 }
@@ -167,18 +174,6 @@ Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICE
 - **Olhar Digital**: Por documentar o bug original em 2020
 - **Comunidade Reddit**: Por compartilhar e discutir o bug
 - **Chrome Extension Community**: Por fornecer documentação e exemplos
-
-## 📞 Suporte
-
-- **Issues**: [GitHub Issues](https://github.com/leodigory/Bug-YouTube-Skip-Ads/issues)
-- **Email**: [leodigory@github.com](mailto:leodigory@github.com)
-- **Discord**: [Servidor do Projeto](https://discord.gg/example)
-
-## 🔗 Links Úteis
-
-- [Artigo Original - Olhar Digital](https://olhardigital.com.br/2020/06/12/noticias/um-ponto-na-url-faz-com-que-youtube-seja-exibido-sem-anuncios/)
-- [Chrome Extensions Documentation](https://developer.chrome.com/docs/extensions/)
-- [Manifest V3 Guide](https://developer.chrome.com/docs/extensions/mv3/intro/)
 
 ---
 

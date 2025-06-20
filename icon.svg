@@ -1,27 +1,25 @@
 <svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#FF0000;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#CC0000;stop-opacity:1" />
-    </linearGradient>
+    <radialGradient id="bg" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#fff" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#e52d27"/>
+    </radialGradient>
     <linearGradient id="play" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#F0F0F0;stop-opacity:1" />
+      <stop offset="0%" stop-color="#fff"/>
+      <stop offset="100%" stop-color="#f7b733"/>
     </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000" flood-opacity="0.3"/>
+    </filter>
   </defs>
-  
-  <!-- Background circle -->
-  <circle cx="64" cy="64" r="60" fill="url(#bg)" stroke="#FFFFFF" stroke-width="4"/>
-  
-  <!-- YouTube play button -->
-  <polygon points="45,35 45,93 85,64" fill="url(#play)" stroke="#FFFFFF" stroke-width="2"/>
-  
-  <!-- Skip arrow -->
-  <g transform="translate(70, 64)">
-    <path d="M-15,-8 L15,-8 M15,-8 L8,-15 M15,-8 L8,-1" stroke="#FFFFFF" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-  </g>
-  
-  <!-- Dot indicator -->
-  <circle cx="100" cy="28" r="8" fill="#00FF00" stroke="#FFFFFF" stroke-width="2"/>
-  <text x="100" y="32" text-anchor="middle" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="12" font-weight="bold">•</text>
+  <!-- Fundo circular com gradiente -->
+  <circle cx="64" cy="64" r="60" fill="url(#bg)" filter="url(#shadow)"/>
+  <!-- Botão play estilizado -->
+  <polygon points="54,40 54,88 92,64" fill="url(#play)" stroke="#fff" stroke-width="3" filter="url(#shadow)"/>
+  <!-- Sinal de pular (duas barras) -->
+  <rect x="32" y="48" width="8" height="32" rx="3" fill="#fff" opacity="0.85"/>
+  <rect x="42" y="48" width="8" height="32" rx="3" fill="#fff" opacity="0.85"/>
+  <!-- Ponto verde indicando o bug -->
+  <circle cx="110" cy="28" r="9" fill="#43ea4a" stroke="#fff" stroke-width="2"/>
+  <text x="110" y="33" text-anchor="middle" fill="#fff" font-family="Arial, sans-serif" font-size="16" font-weight="bold">.</text>
 </svg> 
