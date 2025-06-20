@@ -90,6 +90,8 @@ Bug-YouTube-Skip-Ads/
 ├── manifest.json      # Configuração da extensão
 ├── content.js         # Script principal
 ├── icon.svg          # Ícone da extensão
+├── LICENSE           # Licença MIT
+├── INSTALACAO.md     # Guia de instalação detalhado
 └── README.md         # Este arquivo
 ```
 
@@ -183,4 +185,4 @@ Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICE
 <div align="center">
   <p>⭐ Se este projeto te ajudou, considere dar uma estrela no repositório!</p>
   <p>Desenvolvido com ❤️ por <a href="https://github.com/leodigory">@leodigory</a></p>
-</div> 
+</div>
