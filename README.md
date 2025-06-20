@@ -1,6 +1,6 @@
 # 🚀 Bug YouTube Skip Ads
 
-[![Version](https://img.shields.io/badge/version-1.2-blue.svg)](https://github.com/leodigory/Bug-YouTube-Skip-Ads)
+[![Version](https://img.shields.io/badge/version-1.3-blue.svg)](https://github.com/leodigory/Bug-YouTube-Skip-Ads)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-yellow.svg)](https://chrome.google.com/webstore)
 
@@ -16,8 +16,8 @@ Esta extensão foi desenvolvida baseada em uma descoberta pessoal de um bug no Y
 
 ### 🎯 Como Funciona
 
-A extensão detecta automaticamente quando você acessa um vídeo do YouTube e adiciona um ponto na URL, transformando:
-- `youtube.com/watch?v=VIDEO_ID` → `youtube.com./watch?v=VIDEO_ID`
+A extensão detecta automaticamente quando você acessa um vídeo do YouTube e adiciona um ponto no **final** da URL, transformando:
+- `youtube.com/watch?v=VIDEO_ID` → `youtube.com/watch?v=VIDEO_ID.`
 
 Este simples truque faz com que o YouTube exiba o vídeo sem anúncios, como se você tivesse uma assinatura premium.
 
@@ -107,8 +107,8 @@ Bug-YouTube-Skip-Ads/
 {
   "manifest_version": 3,
   "name": "Bug YouTube Skip Ads @leodigory",
-  "version": "1.2",
-  "description": "Adiciona automaticamente um ponto aos URLs de vídeos do YouTube para pular anúncios",
+  "version": "1.3",
+  "description": "Adiciona automaticamente um ponto ao final dos URLs de vídeos do YouTube para pular anúncios.",
   "permissions": ["storage"],
   "host_permissions": ["*://*.youtube.com/*"],
   "content_scripts": [
@@ -133,19 +133,22 @@ function isYoutubeVideo(url) {
 
 ### Prevenção de Loop
 ```javascript
-const hasDot = currentUrl.includes(".com./watch");
-const isDifferentVideo = currentUrlWithoutDot !== lastYoutubeVideoUrl;
+// Se a URL já termina com ponto, não faz nada
+if (currentUrl.endsWith('.')) {
+  return;
+}
 
-if (!hasDot && isDifferentVideo) {
-  // Adiciona o ponto e redireciona
-  const newUrl = currentUrl.replace(".com/watch", ".com./watch");
-  window.location.replace(newUrl);
+// Compara com a última URL salva para evitar loop
+if (urlWithoutDot === lastUrl) {
+  return;
 }
 ```
 
-### Armazenamento Local
+### Adição do Ponto
 ```javascript
-await chrome.storage.local.set({ lastYoutubeVideoUrl: currentUrlWithoutDot });
+// Adiciona o ponto e redireciona
+const newUrl = currentUrl + '.';
+window.location.replace(newUrl);
 ```
 
 ## 🚨 Limitações e Considerações

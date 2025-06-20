@@ -55,8 +55,8 @@
   <g transform="translate(430, 80)">
     <rect width="120" height="80" rx="10" fill="url(#extension)" filter="url(#shadow)"/>
     <text x="60" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="white" font-weight="bold">3. Adiciona ponto</text>
-    <text x="60" y="40" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="white" font-weight="bold">na URL</text>
-    <text x="60" y="55" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">youtube.com./watch</text>
+    <text x="60" y="40" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="white" font-weight="bold">no final da URL</text>
+    <text x="60" y="55" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">...watch?v=xyz.</text>
   </g>
   
   <!-- Arrow 3 -->
@@ -85,7 +85,7 @@
     <g transform="translate(0, 80)">
       <rect width="300" height="40" rx="5" fill="#e8f5e8" stroke="#28a745" stroke-width="2"/>
       <text x="10" y="15" font-family="monospace" font-size="12" fill="#28a745">Depois:</text>
-      <text x="10" y="30" font-family="monospace" font-size="12" fill="#333">youtube.com./watch?v=dQw4w9WgXcQ</text>
+      <text x="10" y="30" font-family="monospace" font-size="12" fill="#333">youtube.com/watch?v=dQw4w9WgXcQ.</text>
     </g>
   </g>
   

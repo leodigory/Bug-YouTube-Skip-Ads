@@ -1,86 +1,67 @@
 // Bug YouTube Skip Ads - Content Script
-// Versão otimizada para melhor performance
+// Versão 1.3 - Otimizada para adicionar ponto no final da URL
 
 // Configuração
 const CONFIG = {
-  DEBUG: false, // Set to true for debugging
-  DOT_PATTERN: ".com./watch",
-  NORMAL_PATTERN: ".com/watch",
+  DEBUG: false, // Mude para true para logs de debug
   STORAGE_KEY: "lastYoutubeVideoUrl"
 };
 
-// Função otimizada para verificar se é vídeo do YouTube
+// Verifica se é um vídeo do YouTube
 function isYoutubeVideo(url) {
   return url.includes("watch?v=");
 }
 
-// Função otimizada para adicionar ponto na URL
-function addDotToUrl(url) {
-  return url.replace(CONFIG.NORMAL_PATTERN, CONFIG.DOT_PATTERN);
+// Adiciona ponto ao final da URL, se não houver
+function addDotToEndOfUrl(url) {
+  return url.endsWith('.') ? url : url + '.';
 }
 
-// Função otimizada para remover ponto da URL
-function removeDotFromUrl(url) {
-  return url.replace(CONFIG.DOT_PATTERN, CONFIG.NORMAL_PATTERN);
+// Remove ponto do final da URL, se houver
+function removeDotFromEndOfUrl(url) {
+  return url.endsWith('.') ? url.slice(0, -1) : url;
 }
 
-// Função principal otimizada
+// Função principal
 async function processYouTubeVideo() {
   const currentUrl = window.location.href;
   
-  if (CONFIG.DEBUG) {
-    console.log(`[YouTube Skip Ads] Processando URL: ${currentUrl}`);
-  }
+  if (CONFIG.DEBUG) console.log(`[YouTube Skip Ads] Processando URL: ${currentUrl}`);
 
-  // Verificação rápida se é vídeo
   if (!isYoutubeVideo(currentUrl)) {
-    if (CONFIG.DEBUG) console.log(`[YouTube Skip Ads] Não é vídeo do YouTube`);
+    if (CONFIG.DEBUG) console.log(`[YouTube Skip Ads] Não é vídeo do YouTube, ignorando.`);
     return;
   }
 
-  // Verificação se já tem o ponto
-  const hasDot = currentUrl.includes(CONFIG.DOT_PATTERN);
-  if (hasDot) {
-    if (CONFIG.DEBUG) console.log(`[YouTube Skip Ads] URL já tem ponto, ignorando`);
+  // Se a URL já termina com ponto, não faz nada
+  if (currentUrl.endsWith('.')) {
+    if (CONFIG.DEBUG) console.log(`[YouTube Skip Ads] URL já tem ponto no final, ignorando.`);
     return;
   }
-
-  // Obter URL sem ponto para comparação
-  const currentUrlWithoutDot = removeDotFromUrl(currentUrl);
+  
+  const urlWithoutDot = removeDotFromEndOfUrl(currentUrl);
   
   try {
-    // Obter última URL armazenada (otimizado para buscar apenas a chave necessária)
     const result = await chrome.storage.local.get([CONFIG.STORAGE_KEY]);
-    const lastYoutubeVideoUrl = result[CONFIG.STORAGE_KEY];
+    const lastUrl = result[CONFIG.STORAGE_KEY];
     
-    // Verificar se é vídeo diferente
-    if (currentUrlWithoutDot === lastYoutubeVideoUrl) {
-      if (CONFIG.DEBUG) console.log(`[YouTube Skip Ads] Mesmo vídeo, ignorando`);
+    // Se a URL (sem ponto) for a mesma da última navegação, evita loop
+    if (urlWithoutDot === lastUrl) {
+      if (CONFIG.DEBUG) console.log(`[YouTube Skip Ads] Mesma URL do último redirect, ignorando para evitar loop.`);
       return;
     }
 
-    if (CONFIG.DEBUG) {
-      console.log(`[YouTube Skip Ads] Redirecionando para: ${addDotToUrl(currentUrl)}`);
-    }
+    const newUrl = addDotToEndOfUrl(currentUrl);
+    if (CONFIG.DEBUG) console.log(`[YouTube Skip Ads] Redirecionando para: ${newUrl}`);
 
-    // Armazenar nova URL e redirecionar (operações paralelas)
-    await Promise.all([
-      chrome.storage.local.set({ [CONFIG.STORAGE_KEY]: currentUrlWithoutDot }),
-      new Promise(() => {
-        window.location.replace(addDotToUrl(currentUrl));
-      })
-    ]);
+    // Salva a URL (sem ponto) e redireciona
+    await chrome.storage.local.set({ [CONFIG.STORAGE_KEY]: urlWithoutDot });
+    window.location.replace(newUrl);
 
   } catch (error) {
-    if (CONFIG.DEBUG) {
-      console.error(`[YouTube Skip Ads] Erro:`, error);
-    }
+    if (CONFIG.DEBUG) console.error(`[YouTube Skip Ads] Erro:`, error);
   }
 }
 
-// Executar apenas uma vez quando a página carrega
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', processYouTubeVideo);
-} else {
-  processYouTubeVideo();
-}
+// Executa a lógica
+processYouTubeVideo();
