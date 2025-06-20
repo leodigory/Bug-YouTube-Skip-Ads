@@ -1,67 +1,50 @@
 // Bug YouTube Skip Ads - Content Script
-// Versão 1.3 - Lógica corrigida para adicionar ponto após o domínio
+// v1.0 (Lógica Refinada)
 
-// Configuração
 const CONFIG = {
-  DEBUG: false, // Mude para true para logs de debug
+  DEBUG: false,
   DOT_PATTERN: ".com./watch",
   NORMAL_PATTERN: ".com/watch",
-  STORAGE_KEY: "lastYoutubeVideoUrl"
+  STORAGE_KEY: "lastUrl"
 };
 
-// Verifica se é um vídeo do YouTube
 function isYoutubeVideo(url) {
-  return url.includes(CONFIG.NORMAL_PATTERN);
+  return url.includes("watch?v=");
 }
 
-// Adiciona o ponto na URL
 function addDotToUrl(url) {
   return url.replace(CONFIG.NORMAL_PATTERN, CONFIG.DOT_PATTERN);
 }
 
-// Remove o ponto da URL
 function removeDotFromUrl(url) {
   return url.replace(CONFIG.DOT_PATTERN, CONFIG.NORMAL_PATTERN);
 }
 
-// Função principal
-async function processYouTubeVideo() {
+async function processUrlChange() {
   const currentUrl = window.location.href;
-  
-  if (CONFIG.DEBUG) console.log(`[YouTube Skip Ads] Processando URL: ${currentUrl}`);
+  if (CONFIG.DEBUG) console.log(`[Skip Ads] URL mudou para: ${currentUrl}`);
 
-  if (!isYoutubeVideo(currentUrl)) {
-    if (CONFIG.DEBUG) console.log(`[YouTube Skip Ads] Não é vídeo do YouTube, ignorando.`);
+  if (!isYoutubeVideo(currentUrl) || currentUrl.includes(CONFIG.DOT_PATTERN)) {
     return;
   }
 
-  // Se a URL já tem o ponto, não faz nada
-  if (currentUrl.includes(CONFIG.DOT_PATTERN)) {
-    if (CONFIG.DEBUG) console.log(`[YouTube Skip Ads] URL já tem o padrão com ponto, ignorando.`);
-    return;
-  }
-  
+  const { [CONFIG.STORAGE_KEY]: lastUrl } = await chrome.storage.session.get(CONFIG.STORAGE_KEY);
   const urlWithoutDot = removeDotFromUrl(currentUrl);
-  
-  try {
-    const result = await chrome.storage.local.get([CONFIG.STORAGE_KEY]);
-    const lastUrl = result[CONFIG.STORAGE_KEY];
-    
-    if (urlWithoutDot === lastUrl) {
-      if (CONFIG.DEBUG) console.log(`[YouTube Skip Ads] Mesma URL do último redirect, ignorando para evitar loop.`);
-      return;
-    }
 
-    const newUrl = addDotToUrl(currentUrl);
-    if (CONFIG.DEBUG) console.log(`[YouTube Skip Ads] Redirecionando para: ${newUrl}`);
-
-    await chrome.storage.local.set({ [CONFIG.STORAGE_KEY]: urlWithoutDot });
-    window.location.replace(newUrl);
-
-  } catch (error) {
-    if (CONFIG.DEBUG) console.error(`[YouTube Skip Ads] Erro:`, error);
+  if (urlWithoutDot === lastUrl) {
+    if (CONFIG.DEBUG) console.log(`[Skip Ads] Mesma URL da anterior, ignorando para evitar loop.`);
+    await chrome.storage.session.remove(CONFIG.STORAGE_KEY); // Limpa para permitir a próxima visita
+    return;
   }
+
+  if (CONFIG.DEBUG) console.log(`[Skip Ads] Redirecionando...`);
+
+  await chrome.storage.session.set({ [CONFIG.STORAGE_KEY]: urlWithoutDot });
+  window.location.replace(addDotToUrl(currentUrl));
 }
 
-// Executa a lógica
-processYouTubeVideo();
+// Observa mudanças na navegação do YouTube (Single Page Application)
+document.addEventListener('yt-navigate-finish', processUrlChange);
+
+// Execução inicial no carregamento da página
+processUrlChange();

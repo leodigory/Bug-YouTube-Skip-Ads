@@ -1,13 +1,21 @@
 {
   "manifest_version": 3,
   "name": "Bug YouTube Skip Ads @leodigory",
-  "version": "1.3",
-  "description": "Adiciona automaticamente um ponto aos URLs de vídeos do YouTube (.com./) para pular anúncios, com prevenção robusta de loop.",
+  "version": "1.0",
+  "description": "Adiciona automaticamente um ponto aos URLs de vídeos do YouTube (.com./) para pular anúncios.",
   "icons": {
     "16": "icon.svg",
     "32": "icon.svg",
     "48": "icon.svg",
     "128": "icon.svg"
+  },
+  "action": {
+    "default_icon": {
+      "16": "icon.svg",
+      "32": "icon.svg",
+      "48": "icon.svg"
+    },
+    "default_title": "Bug YouTube Skip Ads (Ativo)"
   },
   "permissions": ["storage"],
   "host_permissions": ["*://*.youtube.com/*"],
@@ -15,7 +23,7 @@
     {
       "matches": ["*://*.youtube.com/*"],
       "js": ["content.js"],
-      "run_at": "document_start",
+      "run_at": "document_end",
       "all_frames": false
     }
   ],

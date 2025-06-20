@@ -1,6 +1,6 @@
 # 🚀 Bug YouTube Skip Ads
 
-[![Version](https://img.shields.io/badge/version-1.3-blue.svg)](https://github.com/leodigory/Bug-YouTube-Skip-Ads)
+[![Version](https://img.shields.io/badge/version-1.0-blue.svg)](https://github.com/leodigory/Bug-YouTube-Skip-Ads)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-yellow.svg)](https://chrome.google.com/webstore)
 
@@ -107,8 +107,8 @@ Bug-YouTube-Skip-Ads/
 {
   "manifest_version": 3,
   "name": "Bug YouTube Skip Ads @leodigory",
-  "version": "1.3",
-  "description": "Adiciona automaticamente um ponto aos URLs de vídeos do YouTube para pular anúncios.",
+  "version": "1.0",
+  "description": "Adiciona automaticamente um ponto aos URLs de vídeos do YouTube (.com./) para pular anúncios.",
   "permissions": ["storage"],
   "host_permissions": ["*://*.youtube.com/*"],
   "content_scripts": [
@@ -131,24 +131,20 @@ function isYoutubeVideo(url) {
 }
 ```
 
-### Prevenção de Loop
-```javascript
-// Se a URL já tem o ponto, não faz nada
-if (currentUrl.includes(".com./watch")) {
-  return;
-}
-
-// Compara com a última URL salva para evitar loop
-if (urlWithoutDot === lastUrl) {
-  return;
-}
-```
-
 ### Adição do Ponto
 ```javascript
 // Adiciona o ponto e redireciona
 const newUrl = currentUrl.replace(".com/watch", ".com./watch");
 window.location.replace(newUrl);
+```
+
+### Prevenção de Loop (SPA)
+```javascript
+// Listener para navegação interna do YouTube
+document.addEventListener('yt-navigate-finish', processUrlChange);
+
+// Armazenamento de sessão para evitar loops
+await chrome.storage.session.set({ [CONFIG.STORAGE_KEY]: urlWithoutDot });
 ```
 
 ## 🚨 Limitações e Considerações
