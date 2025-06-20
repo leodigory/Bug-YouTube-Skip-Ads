@@ -1,25 +1,27 @@
 // Bug YouTube Skip Ads - Content Script
-// Versão 1.3 - Otimizada para adicionar ponto no final da URL
+// Versão 1.3 - Lógica corrigida para adicionar ponto após o domínio
 
 // Configuração
 const CONFIG = {
   DEBUG: false, // Mude para true para logs de debug
+  DOT_PATTERN: ".com./watch",
+  NORMAL_PATTERN: ".com/watch",
   STORAGE_KEY: "lastYoutubeVideoUrl"
 };
 
 // Verifica se é um vídeo do YouTube
 function isYoutubeVideo(url) {
-  return url.includes("watch?v=");
+  return url.includes(CONFIG.NORMAL_PATTERN);
 }
 
-// Adiciona ponto ao final da URL, se não houver
-function addDotToEndOfUrl(url) {
-  return url.endsWith('.') ? url : url + '.';
+// Adiciona o ponto na URL
+function addDotToUrl(url) {
+  return url.replace(CONFIG.NORMAL_PATTERN, CONFIG.DOT_PATTERN);
 }
 
-// Remove ponto do final da URL, se houver
-function removeDotFromEndOfUrl(url) {
-  return url.endsWith('.') ? url.slice(0, -1) : url;
+// Remove o ponto da URL
+function removeDotFromUrl(url) {
+  return url.replace(CONFIG.DOT_PATTERN, CONFIG.NORMAL_PATTERN);
 }
 
 // Função principal
@@ -33,28 +35,26 @@ async function processYouTubeVideo() {
     return;
   }
 
-  // Se a URL já termina com ponto, não faz nada
-  if (currentUrl.endsWith('.')) {
-    if (CONFIG.DEBUG) console.log(`[YouTube Skip Ads] URL já tem ponto no final, ignorando.`);
+  // Se a URL já tem o ponto, não faz nada
+  if (currentUrl.includes(CONFIG.DOT_PATTERN)) {
+    if (CONFIG.DEBUG) console.log(`[YouTube Skip Ads] URL já tem o padrão com ponto, ignorando.`);
     return;
   }
   
-  const urlWithoutDot = removeDotFromEndOfUrl(currentUrl);
+  const urlWithoutDot = removeDotFromUrl(currentUrl);
   
   try {
     const result = await chrome.storage.local.get([CONFIG.STORAGE_KEY]);
     const lastUrl = result[CONFIG.STORAGE_KEY];
     
-    // Se a URL (sem ponto) for a mesma da última navegação, evita loop
     if (urlWithoutDot === lastUrl) {
       if (CONFIG.DEBUG) console.log(`[YouTube Skip Ads] Mesma URL do último redirect, ignorando para evitar loop.`);
       return;
     }
 
-    const newUrl = addDotToEndOfUrl(currentUrl);
+    const newUrl = addDotToUrl(currentUrl);
     if (CONFIG.DEBUG) console.log(`[YouTube Skip Ads] Redirecionando para: ${newUrl}`);
 
-    // Salva a URL (sem ponto) e redireciona
     await chrome.storage.local.set({ [CONFIG.STORAGE_KEY]: urlWithoutDot });
     window.location.replace(newUrl);
 

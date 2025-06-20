@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Bug YouTube Skip Ads @leodigory",
   "version": "1.3",
-  "description": "Adiciona automaticamente um ponto ao final dos URLs de vídeos do YouTube para pular anúncios, com prevenção robusta de loop.",
+  "description": "Adiciona automaticamente um ponto aos URLs de vídeos do YouTube (.com./) para pular anúncios, com prevenção robusta de loop.",
   "icons": {
     "16": "icon.svg",
     "32": "icon.svg",

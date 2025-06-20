@@ -16,8 +16,8 @@ Esta extensão foi desenvolvida baseada em uma descoberta pessoal de um bug no Y
 
 ### 🎯 Como Funciona
 
-A extensão detecta automaticamente quando você acessa um vídeo do YouTube e adiciona um ponto no **final** da URL, transformando:
-- `youtube.com/watch?v=VIDEO_ID` → `youtube.com/watch?v=VIDEO_ID.`
+A extensão detecta automaticamente quando você acessa um vídeo do YouTube e adiciona um ponto (`.`) na URL entre o domínio e o caminho, transformando:
+- `youtube.com/watch?v=VIDEO_ID` → `youtube.com./watch?v=VIDEO_ID`
 
 Este simples truque faz com que o YouTube exiba o vídeo sem anúncios, como se você tivesse uma assinatura premium.
 
@@ -108,7 +108,7 @@ Bug-YouTube-Skip-Ads/
   "manifest_version": 3,
   "name": "Bug YouTube Skip Ads @leodigory",
   "version": "1.3",
-  "description": "Adiciona automaticamente um ponto ao final dos URLs de vídeos do YouTube para pular anúncios.",
+  "description": "Adiciona automaticamente um ponto aos URLs de vídeos do YouTube para pular anúncios.",
   "permissions": ["storage"],
   "host_permissions": ["*://*.youtube.com/*"],
   "content_scripts": [
@@ -133,8 +133,8 @@ function isYoutubeVideo(url) {
 
 ### Prevenção de Loop
 ```javascript
-// Se a URL já termina com ponto, não faz nada
-if (currentUrl.endsWith('.')) {
+// Se a URL já tem o ponto, não faz nada
+if (currentUrl.includes(".com./watch")) {
   return;
 }
 
@@ -147,7 +147,7 @@ if (urlWithoutDot === lastUrl) {
 ### Adição do Ponto
 ```javascript
 // Adiciona o ponto e redireciona
-const newUrl = currentUrl + '.';
+const newUrl = currentUrl.replace(".com/watch", ".com./watch");
 window.location.replace(newUrl);
 ```
 
