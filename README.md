@@ -46,9 +46,32 @@ Para o usuário, o processo é invisível. A extensão simplesmente funciona. Ma
 
 Para quem tem interesse nos detalhes técnicos, o diagrama de sequência abaixo demonstra a interação entre os componentes da extensão e a lógica de decisão para evitar recarregamentos desnecessários. Este diagrama mostra a robustez da solução, tratando casos de uso e prevenindo loops.
 
-<div align="center">
-  <img src="https://mermaid.ink/svg/pako:eNqNVM1qxDAU_JdZfImWso8CxYdCSENhLS590MPqx5IVu0nMBnZSkpD-e5ewk4sGl7n33HskZc0IOhGiGVeSdCYoFpwaSNWFI-VpXs4watkeiZBukP8eSZNndp_N1p_lKlcEOYVSnWHxH3O53maxeZrv_VvlPaAeaO81OwdivhulmHalUMbLykvSnNd4v0nBw0dJrTtu9WuN58V2O1Htc3vxvSrpD-g_D9grhH3xGT1UDzTxFvXyPmTt_8juJxCds4R3zNivINt-d-XpP4vspeXt239rWbN-419Awq-R9Cds4Q03-BuwGkH90Kyfdf3xmkHCzom8vgODY0TDunCHe8TCDL4TiDb4TaBjaNnlLRsHez8jcnmv7BWCnAn60HbL2D8W9Rrz" alt="Diagrama de Sequência Técnico">
-</div>
+```mermaid
+sequenceDiagram
+    participant User as Usuário
+    participant Browser as Navegador
+    participant Extension as Extensão (content.js)
+    participant LocalStorage as "localStorage"
+
+    User->>Browser: Acessa URL de vídeo do YouTube
+    Browser->>Extension: Dispara evento de carregamento de página
+    note right of Extension: O script da extensão é injetado.
+
+    Extension->>Extension: Ativa a função de verificação (runCheck)
+    Extension->>LocalStorage: Lê a última URL processada (getItem)
+    LocalStorage-->>Extension: Retorna URL (ou null)
+
+    alt URL atual NÃO foi processada antes
+        Extension->>LocalStorage: Armazena a URL atual (setItem)
+        note right of Extension: Garante que a URL não será processada novamente.
+        Extension->>Browser: Constrói a nova URL adicionando um "."
+        Browser->>Browser: Redireciona para a nova URL
+        Browser-->>User: Exibe o vídeo sem anúncios ✨
+    else URL atual JÁ foi processada
+        Extension->>User: Nenhuma ação é tomada (Loop evitado)
+        note right of Extension: O script encerra a execução para esta página.
+    end
+```
 
 ### 💡 Destaques de Implementação (Demonstração de Habilidades)
 - 🧠 **Prevenção de Loop Inteligente**: Usa `localStorage` para armazenar **apenas a última URL processada**, uma abordagem eficiente em memória que garante que cada vídeo seja modificado apenas uma vez por sessão, evitando o crescimento desnecessário de dados.
