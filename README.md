@@ -1,23 +1,28 @@
-# 🚀 Bug YouTube Skip Ads
-
-[![Version](https://img.shields.io/badge/version-1.3-blue.svg)](https://github.com/leodigory/Bug-YouTube-Skip-Ads)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-yellow.svg)](https://chrome.google.com/webstore)
-
 <div align="center">
-  <img src="icon.png" alt="Bug YouTube Skip Ads Logo" width="128" height="128">
+  <img src="icon.png" alt="Logo" width="128" height="128">
   <h1 align="center">Bug YouTube™ Skip Ads</h1>
   <p align="center">
     <strong>Uma extensão que automatiza um bug para pular anúncios no YouTube de forma simples e eficaz.</strong>
     <br />
     <em>Um projeto que transforma uma descoberta casual de 2015 em uma ferramenta poderosa.</em>
   </p>
-  <p align="center">
-    <img alt="Versão" src="https://img.shields.io/badge/version-1.0-blue?style=for-the-badge">
-    <img alt="Licença" src="https://img.shields.io/badge/license-MIT-green?style=for-the-badge">
-    <img alt="Plataforma" src="https://img.shields.io/badge/platform-Chrome%20%7C%20Edge-yellow?style=for-the-badge">
-  </p>
 </div>
+
+<div align="center">
+
+[![Versão](https://img.shields.io/badge/version-1.0-blue?style=for-the-badge&logo=)](https://github.com/leodigory/Bug-YouTube-Skip-Ads)
+[![Licença](https://img.shields.io/badge/license-MIT-green?style=for-the-badge&logo=)](LICENSE)
+[![Plataforma](https://img.shields.io/badge/platform-Chrome%20%7C%20Edge-yellow?style=for-the-badge&logo=googlechrome)](https://www.google.com/chrome/)
+
+</div>
+
+### 🛠️ **Tech Stack & Ferramentas**
+<p align="center">
+  <img alt="JavaScript" src="https://img.shields.io/badge/JavaScript-ES6%2B-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" title="JavaScript moderno (ES6+) usado para toda a lógica da extensão.">
+  <img alt="HTML5" src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" title="Estrutura base da web.">
+  <img alt="Manifest V3" src="https://img.shields.io/badge/Manifest%20V3-Google%20Chrome-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white" title="A mais recente e segura API para extensões do Chrome, garantindo segurança e performance.">
+  <img alt="Git" src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white" title="Sistema de controle de versão para gerenciamento do código-fonte.">
+</p>
 
 ---
 
@@ -29,33 +34,33 @@ Na época, presumi que fosse uma falha isolada, um truque que só funcionava par
 
 Essa validação pública foi o gatilho para transformar um truque manual em uma ferramenta automatizada. Este projeto nasceu da vontade de aplicar minhas habilidades de desenvolvimento para criar uma solução elegante para um problema que eu conhecia intimamente, tornando-a acessível a todos.
 
-## ✨ Como a Mágica Acontece: O Fluxo de Trabalho
+## ✨ Visão Geral do Funcionamento
 
-A extensão opera de forma inteligente e discreta em segundo plano. O objetivo é ser totalmente "instale e esqueça". O fluxograma abaixo ilustra o processo lógico que garante a eficácia e evita loops indesejados.
+Para o usuário, o processo é invisível. A extensão simplesmente funciona. Mas como? A imagem abaixo ilustra a ideia central de forma simples e direta.
 
 <div align="center">
-  <img src="https://mermaid.ink/svg/pako:eNqNVMtqwzAQ_Jd8iimS_wAFHhQhDYW2uNSHHlY_KCu2k5gdyU4S6r_vJGEnFwYvc8878x5Z0wI6EaJ5V4J0JigWnFpI14Uj5XFezjBq6R6FkG6Q_xZJ82d2n8zWn-UqV4R5CqU7w6I-51J95sF6m2992-U9oB5o7zU7B2K9G6iYc2pQzMvKz9Jc16i_iSg4-Kk1h231rXm-2K8nSj2-b34XpX0B_QfB-wVgr74hB6qB5p4i3p5H7H2f2T3E4jG2cI7Z-xXkG2x2vL0n0V20uL27b_1rFm_8S8g49dI-lO2cI3b_A3QW6B-WjTz7r2-E0g4-dE3t-BwR2iYd2oQ3vE0g2-E4g2-E2gY2jZ5S0bB3s_I3J5r-wVgpwJ-tB2y9g_FvUa8w" alt="Diagrama de Funcionamento da Extensão">
+    <img src="how-it-works.svg" alt="Como a Extensão Funciona" width="700">
 </div>
 
-### Destaques do Projeto (Habilidades em Ação)
-- 🧠 **Prevenção de Loop Inteligente**: Usa `localStorage` para armazenar **apenas a última URL processada**, uma abordagem eficiente em memória que garante que cada vídeo seja modificado apenas uma vez por sessão.
-- ⚡ **Performance Otimizada**: Código JavaScript leve e sem dependências, com delays estratégicos (`setTimeout`) para garantir que o script só rode após o carregamento dos elementos essenciais da página, evitando erros de timing.
-- 🛡️ **Segurança e Privacidade**: A extensão opera inteiramente no lado do cliente, não coleta dados e solicita apenas as permissões mínimas necessárias para funcionar.
-- 🎯 **Detecção Robusta**: Suporte a múltiplos formatos de URL do YouTube (`/watch`, `/embed`, `/shorts`), garantindo uma cobertura ampla.
+## 🔧 Mergulho Técnico: Arquitetura e Fluxo de Decisão
 
-## 🛠️ Tech Stack
+Para quem tem interesse nos detalhes técnicos, o diagrama de sequência abaixo demonstra a interação entre os componentes da extensão e a lógica de decisão para evitar recarregamentos desnecessários. Este diagrama mostra a robustez da solução, tratando casos de uso e prevenindo loops.
 
-<p align="center">
-  <img alt="JavaScript" src="https://img.shields.io/badge/JavaScript-ES6%2B-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" title="JavaScript moderno usado para toda a lógica da extensão.">
-  <img alt="HTML5" src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" title="Estrutura base da web.">
-  <img alt="Manifest V3" src="https://img.shields.io/badge/Manifest%20V3-Google%20Chrome-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white" title="A mais recente e segura API para extensões do Chrome.">
-</p>
+<div align="center">
+  <img src="https://mermaid.ink/svg/pako:eNqNVM1qxDAU_JdZfImWso8CxYdCSENhLS590MPqx5IVu0nMBnZSkpD-e5ewk4sGl7n33HskZc0IOhGiGVeSdCYoFpwaSNWFI-VpXs4watkeiZBukP8eSZNndp_N1p_lKlcEOYVSnWHxH3O53maxeZrv_VvlPaAeaO81OwdivhulmHalUMbLykvSnNd4v0nBw0dJrTtu9WuN58V2O1Htc3vxvSrpD-g_D9grhH3xGT1UDzTxFvXyPmTt_8juJxCds4R3zNivINt-d-XpP4vspeXt239rWbN-419Awq-R9Cds4Q03-BuwGkH90Kyfdf3xmkHCzom8vgODY0TDunCHe8TCDL4TiDb4TaBjaNnlLRsHez8jcnmv7BWCnAn60HbL2D8W9Rrz" alt="Diagrama de Sequência Técnico">
+</div>
+
+### 💡 Destaques de Implementação (Demonstração de Habilidades)
+- 🧠 **Prevenção de Loop Inteligente**: Usa `localStorage` para armazenar **apenas a última URL processada**, uma abordagem eficiente em memória que garante que cada vídeo seja modificado apenas uma vez por sessão, evitando o crescimento desnecessário de dados.
+- ⚡ **Performance Otimizada**: Código JavaScript leve e sem dependências, com delays estratégicos (`setTimeout`) para garantir que o script só rode após o carregamento dos elementos essenciais da página, demonstrando conhecimento sobre o ciclo de vida de páginas web e a natureza assíncrona do JS.
+- 🛡️ **Segurança e Privacidade by Design**: A extensão opera inteiramente no lado do cliente, não coleta dados e solicita apenas as permissões mínimas necessárias, seguindo as boas práticas de desenvolvimento seguro para extensões (Manifest V3).
+- 🎯 **Detecção Robusta**: Suporte a múltiplos formatos de URL do YouTube (`/watch`, `/embed`, `/shorts`, etc.) através do uso de expressões regulares, garantindo uma cobertura ampla e manutenível.
 
 ## 📦 Instalação Rápida
 
 Siga os passos abaixo para ter a extensão funcionando em menos de um minuto.
 
-1.  **Baixe o Projeto**: Faça o download do código-fonte clicando em `Code` > `Download ZIP` no topo da página, ou clone o repositório.
+1.  **Baixe o Projeto**: Faça o download do código-fonte clicando em `Code` > `Download ZIP` no topo da página, ou clone o repositório com Git.
     ```bash
     git clone https://github.com/leodigory/Bug-YouTube-Skip-Ads.git
     ```
