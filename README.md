@@ -1,182 +1,87 @@
 # 🚀 Bug YouTube Skip Ads
 
-[![Version](https://img.shields.io/badge/version-1.0-blue.svg)](https://github.com/leodigory/Bug-YouTube-Skip-Ads)
+[![Version](https://img.shields.io/badge/version-1.3-blue.svg)](https://github.com/leodigory/Bug-YouTube-Skip-Ads)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-yellow.svg)](https://chrome.google.com/webstore)
 
-> **Uma extensão inovadora que aproveita um bug descoberto para pular anúncios no YouTube automaticamente**
-
 <div align="center">
-  <img src="icon.svg" alt="Bug YouTube Skip Ads Logo" width="128" height="128">
+  <img src="icon.png" alt="Bug YouTube Skip Ads Logo" width="128" height="128">
+  <h1 align="center">Bug YouTube Skip Ads</h1>
+  <p align="center">
+    <strong>Uma extensão que automatiza um bug para pular anúncios no YouTube de forma simples e eficaz.</strong>
+  </p>
+  <p align="center">
+    <img alt="Versão" src="https://img.shields.io/badge/version-1.0-blue?style=for-the-badge">
+    <img alt="Licença" src="https://img.shields.io/badge/license-MIT-green?style=for-the-badge">
+    <img alt="Plataforma" src="https://img.shields.io/badge/platform-Chrome%20%7C%20Edge-yellow?style=for-the-badge">
+  </p>
 </div>
 
-## 📖 Sobre o Projeto
+---
 
-Esta extensão foi desenvolvida baseada em uma descoberta pessoal de um bug no YouTube que permite pular anúncios adicionando um ponto (`.`) na URL. O bug foi documentado em 2020 pelo [Olhar Digital](https://olhardigital.com.br/2020/06/12/noticias/um-ponto-na-url-faz-com-que-youtube-seja-exibido-sem-anuncios/) e continua funcional até hoje.
+## 📖 A História por Trás do Bug
 
-### 🎯 Como Funciona
+Esta extensão não é apenas um código, é a automação de uma descoberta pessoal. **Eu descobri este bug de forma independente por volta de 2018**, muito antes de se tornar notícia. Ao notar que adicionar um simples ponto (`.`) ao final da URL de um vídeo do YouTube pulava toda a publicidade, comecei a usá-lo manualmente.
 
-A extensão detecta automaticamente quando você acessa um vídeo do YouTube e adiciona um ponto (`.`) no **final** da URL, transformando:
-- `youtube.com/watch?v=VIDEO_ID` → `youtube.com/watch?v=VIDEO_ID.`
+Em 2020, o site [Olhar Digital](https://olhardigital.com.br/2020/06/12/noticias/um-ponto-na-url-faz-com-que-youtube-seja-exibido-sem-anuncios/) e outras comunidades, como o Reddit, noticiaram o mesmo truque. Vendo que a falha persistia e que poderia ajudar mais pessoas, decidi criar esta extensão para automatizar o processo, tornando-o acessível a todos com um único clique.
 
-Este simples truque faz com que o YouTube exiba o vídeo sem anúncios.
+## ✨ Como a Mágica Acontece
+
+A lógica é simples, mas poderosa. A extensão monitora sua navegação no YouTube e, ao identificar um vídeo, executa o seguinte fluxo de forma automática e inteligente:
 
 <div align="center">
-  <img src="how-it-works.svg" alt="Como a Extensão Funciona" width="800" height="400">
+  <img src="https://mermaid.ink/svg/pako:eNqNVMtqwzAQ_Jd8iimS_wAFHhQhDYW2uNSHHlY_KCu2k5gdyU4S6r_vJGEnFwYvc8878x5Z0wI6EaJ5V4J0JigWnFpI14Uj5XFezjBq6R6FkG6Q_xZJ82d2n8zWn-UqV4R5CqU7w6I-51J95sF6m2992-U9oB5o7zU7B2K9G6iYc2pQzMvKz9Jc16i_iSg4-Kk1h231rXm-2K8nSj2-b34XpX0B_QfB-wVgr74hB6qB5p4i3p5H7H2f2T3E4jG2cI7Z-xXkG2x2vL0n0V20uL27b_1rFm_8S8g49dI-lO2cI3b_A3QW6B-WjTz7r2-E0g4-dE3t-BwR2iYd2oQ3vE0g2-E4g2-E2gY2jZ5S0bB3s_I3J5r-wVgpwJ-tB2y9g_FvUa8w" alt="Diagrama de Funcionamento da Extensão">
 </div>
 
-## ✨ Características
-
-- 🔄 **Automático**: Funciona sem intervenção manual
-- 🛡️ **Prevenção de Loop**: Evita redirecionamentos infinitos
-- 📱 **Compatível**: Funciona em desktop e mobile (modo desktop)
-- ⚡ **Leve**: Código otimizado e eficiente
-- 🔒 **Seguro**: Não coleta dados pessoais
-- 🎨 **Interface Limpa**: Sem popups ou notificações intrusivas
+### Principais Características
+- 🔄 **100% Automático**: Sem cliques ou qualquer intervenção manual.
+- 🧠 **Prevenção de Loop**: Usa `localStorage` para "lembrar" o último vídeo e evitar recarregamentos infinitos.
+- ⚡ **Leve e Rápido**: Otimizado para não impactar a performance do seu navegador.
+- 🛡️ **Seguro e Privado**: Não coleta ou armazena nenhum dado pessoal.
+- 🎯 **Compatibilidade Ampla**: Funciona com múltiplos formatos de URL do YouTube (vídeos, shorts, embeds).
+- ⏱️ **Timing Inteligente**: Aguarda o momento certo para agir, garantindo que a página esteja carregada.
 
 ## 🛠️ Tecnologias Utilizadas
 
-- **JavaScript ES6+**: Lógica principal da extensão
-- **Chrome Extension Manifest V3**: API moderna do Chrome
-- **SVG**: Ícone vetorial escalável
-- **GitHub**: Versionamento e distribuição
+Este projeto foi construído com as tecnologias essenciais da web, mantendo-o simples e eficiente.
+
+<p align="center">
+  <img alt="JavaScript" src="https://img.shields.io/badge/JavaScript-ES6%2B-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">
+  <img alt="HTML5" src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white">
+  <img alt="Manifest V3" src="https://img.shields.io/badge/Manifest%20V3-Google%20Chrome-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white">
+</p>
 
 ## 📦 Instalação
 
-### Método 1: Instalação Manual (Recomendado)
+Siga os passos abaixo para ter a extensão funcionando em menos de um minuto.
 
-1. **Baixe os arquivos**
-   ```bash
-   git clone https://github.com/leodigory/Bug-YouTube-Skip-Ads.git
-   cd Bug-YouTube-Skip-Ads
-   ```
-
-2. **Abra o Chrome**
-   - Digite `chrome://extensions/` na barra de endereços
-   - Ou vá em Menu → Mais ferramentas → Extensões
-
-3. **Ative o Modo Desenvolvedor**
-   - Clique no toggle "Modo do desenvolvedor" no canto superior direito
-
-4. **Carregue a extensão**
-   - Clique em "Carregar sem compactação"
-   - Selecione a pasta `Bug-YouTube-Skip-Ads`
-   - Clique em "Selecionar pasta"
-
-5. **Confirme a instalação**
-   - A extensão aparecerá na lista com o ícone personalizado
-   - O status deve mostrar "Ativado"
-
-### Método 2: Download Direto
-
-1. Baixe os arquivos `manifest.json` e `content.js` deste repositório
-2. Crie uma nova pasta e coloque os arquivos dentro
-3. Siga os passos 2-5 do Método 1
+1.  **Baixe os Arquivos**: Faça o download do código-fonte, clicando em `Code` > `Download ZIP`, ou clone o repositório.
+    ```bash
+    git clone https://github.com/leodigory/Bug-YouTube-Skip-Ads.git
+    ```
+2.  **Acesse as Extensões**: Abra seu navegador (Chrome, Edge, etc.) e vá para a página de gerenciamento de extensões.
+    -   **Chrome**: `chrome://extensions/`
+    -   **Edge**: `edge://extensions/`
+3.  **Ative o Modo Desenvolvedor**: Procure por um interruptor chamado "Modo do desenvolvedor" ou "Developer mode" e ative-o.
+4.  **Carregue a Extensão**:
+    -   Clique no botão "Carregar sem compactação" ou "Load unpacked".
+    -   Selecione a pasta onde você salvou os arquivos do projeto.
+5.  **Pronto!** A extensão aparecerá na sua lista e já estará ativa e funcionando.
 
 ## 🎮 Como Usar
 
-1. **Instale a extensão** seguindo os passos acima
-2. **Acesse qualquer vídeo do YouTube**
-3. **A extensão funcionará automaticamente**
-4. **Aproveite os vídeos sem anúncios!**
-
-### 📱 Uso no Mobile
-
-Para usar no celular:
-1. Abra o YouTube no navegador
-2. Ative a "Versão para computador" nas configurações
-3. A extensão funcionará normalmente
-
-## 🔧 Estrutura do Projeto
-
-```
-Bug-YouTube-Skip-Ads/
-├── manifest.json      # Configuração da extensão
-├── content.js         # Script principal
-├── icon.svg          # Ícone da extensão
-├── how-it-works.svg  # Diagrama explicativo
-├── LICENSE           # Licença MIT
-├── INSTALACAO.md     # Guia de instalação detalhado
-├── DOWNLOAD.md       # Guia de download direto
-└── README.md         # Este arquivo
-```
-
-## 📋 Manifest.json
-
-```json
-{
-  "manifest_version": 3,
-  "name": "Bug YouTube Skip Ads @leodigory",
-  "version": "1.0",
-  "description": "Adiciona automaticamente um ponto aos URLs de vídeos do YouTube (.com./) para pular anúncios.",
-  "permissions": ["storage"],
-  "host_permissions": ["*://*.youtube.com/*"],
-  "content_scripts": [
-    {
-      "matches": ["*://*.youtube.com/*"],
-      "js": ["content.js"],
-      "run_at": "document_start",
-      "all_frames": false
-    }
-  ]
-}
-```
-
-## 🧠 Como o Código Funciona
-
-### Detecção de Vídeos
-```javascript
-function isYoutubeVideo(url) {
-  return url.includes("watch?v=");
-}
-```
-
-### Adição do Ponto
-```javascript
-// Adiciona o ponto no final e redireciona
-const newUrl = currentUrl + '.';
-window.location.replace(newUrl);
-```
-
-### Prevenção de Loop (SPA)
-```javascript
-// Listener para navegação interna do YouTube
-document.addEventListener('yt-navigate-finish', processUrl);
-
-// Usa chrome.storage.session para "lembrar" a última URL e quebrar loops.
-await chrome.storage.session.set({ [CONFIG.STORAGE_KEY]: currentUrl });
-```
-
-## 🚨 Limitações e Considerações
-
-- ⚠️ **Bug do YouTube**: Esta extensão aproveita um bug que pode ser corrigido a qualquer momento
-- 📺 **Apenas Anúncios de Vídeo**: Não afeta anúncios de banner ou overlay
-- 🔄 **Redirecionamento**: Há um pequeno delay devido ao redirecionamento
-- 📱 **Mobile**: Requer modo desktop no navegador mobile
-
-## 🤝 Contribuindo
-
-Contribuições são bem-vindas! Para contribuir:
-
-1. Faça um fork do projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
-5. Abra um Pull Request
+É simples:
+1. Instale a extensão.
+2. Acesse qualquer vídeo no YouTube.
+3. **É isso.** A extensão faz todo o trabalho sozinha. Assista seus vídeos sem interrupções!
 
 ## 📄 Licença
 
-Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICENSE) para detalhes.
-
-## 🙏 Agradecimentos
-
-- **Olhar Digital**: Por documentar o bug original em 2020
-- **Comunidade Reddit**: Por compartilhar e discutir o bug
-- **Chrome Extension Community**: Por fornecer documentação e exemplos
+Este projeto é distribuído sob a Licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
 ---
 
 <div align="center">
-  <p>⭐ Se este projeto te ajudou, considere dar uma estrela no repositório!</p>
+  <p>⭐ Se esta extensão te ajudou, considere dar uma estrela no repositório! ⭐</p>
   <p>Desenvolvido com ❤️ por <a href="https://github.com/leodigory">@leodigory</a></p>
 </div>

@@ -4,20 +4,19 @@
   "version": "1.0",
   "description": "Adiciona automaticamente um ponto aos URLs de vídeos do YouTube (.com./) para pular anúncios.",
   "icons": {
-    "16": "icon.svg",
-    "32": "icon.svg",
-    "48": "icon.svg",
-    "128": "icon.svg"
+    "16": "icon.png",
+    "32": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
   },
   "action": {
     "default_icon": {
-      "16": "icon.svg",
-      "32": "icon.svg",
-      "48": "icon.svg"
+      "16": "icon.png",
+      "32": "icon.png",
+      "48": "icon.png"
     },
     "default_title": "Bug YouTube Skip Ads (Ativo)"
   },
-  "permissions": ["storage"],
   "host_permissions": ["*://*.youtube.com/*"],
   "content_scripts": [
     {

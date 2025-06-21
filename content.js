@@ -1,12 +1,16 @@
 // Bug YouTube Skip Ads - Content Script
-// v1.0 (Correção Final com Logs Detalhados)
+// v1.5 (Corrigida - Delays para Carregamento Completo)
 
 const CONFIG = {
   // ATENÇÃO: Logs de debug estão ativados para diagnóstico.
   DEBUG: true,
   DOT_PATTERN: ".com./watch",
   NORMAL_PATTERN: ".com/watch",
-  STORAGE_KEY: 'yt-skip-ads-last-url' // Chave para o armazenamento da sessão
+  STORAGE_KEY: 'yt-skip-ads-last-processed-url', // Chave para o localStorage
+  INITIAL_DELAY: 2000, // 2 segundos para carregamento inicial
+  REDIRECT_DELAY: 1000, // 1 segundo antes do redirecionamento
+  NAVIGATION_DELAY: 300, // 300ms após navegação
+  MUTATION_DELAY: 500   // 500ms após mudança de URL
 };
 
 function log(message) {
@@ -20,36 +24,67 @@ function removeDotFromUrl(url) {
     return url.replace(CONFIG.DOT_PATTERN, CONFIG.NORMAL_PATTERN);
 }
 
-async function runCheck() {
+function getUrlWithoutDot(url) {
+  // Remove o ponto do final da URL se existir
+  return url.endsWith('.') ? url.slice(0, -1) : url;
+}
+
+function isValidYouTubeVideoUrl(url) {
+  log(`Verificando URL: "${url}"`);
+  
+  // Verifica se é uma URL do YouTube
+  if (!url || !url.includes('youtube.com')) {
+    log("URL não contém 'youtube.com'");
+    return false;
+  }
+  
+  // Lista de padrões válidos para páginas de vídeo
+  const videoPatterns = [
+    /youtube\.com\/watch\?v=/,
+    /youtube\.com\/embed\//,
+    /youtube\.com\/v\//,
+    /youtu\.be\//,
+    /youtube\.com\/shorts\//
+  ];
+  
+  const isValid = videoPatterns.some(pattern => {
+    const matches = pattern.test(url);
+    if (matches) {
+      log(`Padrão válido encontrado: ${pattern}`);
+    }
+    return matches;
+  });
+  
+  if (!isValid) {
+    log("Nenhum padrão de vídeo válido encontrado");
+  }
+  
+  return isValid;
+}
+
+function runCheck() {
   const currentUrl = window.location.href;
   log(`Iniciando verificação... URL é: "${currentUrl}"`);
 
-  if (!currentUrl || !currentUrl.startsWith("https://www.youtube.com/")) {
-    log("URL inválida ou não é do YouTube. Abortando.");
+  // Verifica se é uma URL válida do YouTube
+  if (!isValidYouTubeVideoUrl(currentUrl)) {
+    log(`URL não é uma página de vídeo válida do YouTube. Padrões suportados: /watch?v=, /embed/, /v/, /shorts/, youtu.be`);
+    log(`URL atual: ${currentUrl}`);
     return;
   }
 
-  // 1. Se não for uma página de vídeo, ignora.
-  const isWatchPage = currentUrl.includes('watch?v=');
-  const isEmbedPage = currentUrl.includes('/embed/');
-
-  if (!isWatchPage && !isEmbedPage) {
-    log("Não é uma página de vídeo ou embed. Nenhuma ação.");
-    return;
-  }
-  
   // 2. Se a URL já termina com ponto, o trabalho está feito.
   if (currentUrl.endsWith('.')) {
-    log("URL já termina com ponto. Nenhuma ação.");
+    log("URL já termina com ponto. Nenhuma ação necessária.");
     return;
   }
 
-  // 3. Prevenção de Loop
-  const { [CONFIG.STORAGE_KEY]: lastUrl } = await chrome.storage.session.get(CONFIG.STORAGE_KEY);
-  if (lastUrl === currentUrl) {
-    log(`Loop detectado. Bloqueando redirecionamento para a mesma URL: "${currentUrl}"`);
-    // Limpa a chave para que a próxima navegação voluntária do usuário funcione
-    await chrome.storage.session.remove(CONFIG.STORAGE_KEY);
+  // 3. Verifica se esta URL já foi processada anteriormente
+  const lastProcessedUrl = localStorage.getItem(CONFIG.STORAGE_KEY);
+  const urlWithoutDot = getUrlWithoutDot(currentUrl);
+  
+  if (lastProcessedUrl === urlWithoutDot) {
+    log(`URL já foi processada anteriormente: "${urlWithoutDot}". Nenhuma ação necessária.`);
     return;
   }
 
@@ -57,19 +92,36 @@ async function runCheck() {
   const newUrl = currentUrl + '.';
   log(`Tudo certo! Adicionando ponto no final.`);
   
-  // Armazena a URL ATUAL para a verificação de loop na próxima página
-  await chrome.storage.session.set({ [CONFIG.STORAGE_KEY]: currentUrl });
+  // Armazena apenas a URL atual (sem ponto) como última processada
+  localStorage.setItem(CONFIG.STORAGE_KEY, urlWithoutDot);
   
   log(`EXECUTANDO REDIRECIONAMENTO PARA: "${newUrl}"`);
-  window.location.replace(newUrl);
+  log(`Aguardando ${CONFIG.REDIRECT_DELAY}ms para garantir carregamento completo...`);
+  
+  // Aguarda o tempo configurado para garantir que a página carregou completamente
+  setTimeout(() => {
+    log(`Redirecionando agora para: "${newUrl}"`);
+    window.location.href = newUrl;
+  }, CONFIG.REDIRECT_DELAY);
 }
 
 // Ouve o evento de navegação do YouTube
 document.addEventListener('yt-navigate-finish', () => {
-  log("Evento 'yt-navigate-finish' detectado. Acionando verificação em 100ms.");
-  setTimeout(runCheck, 100); 
+  log(`Evento 'yt-navigate-finish' detectado. Acionando verificação em ${CONFIG.NAVIGATION_DELAY}ms.`);
+  setTimeout(runCheck, CONFIG.NAVIGATION_DELAY); 
 });
 
+// Listener adicional para mudanças na URL (History API)
+let lastUrl = location.href;
+new MutationObserver(() => {
+  const url = location.href;
+  if (url !== lastUrl) {
+    lastUrl = url;
+    log(`Mudança na URL detectada via MutationObserver. Acionando verificação em ${CONFIG.MUTATION_DELAY}ms.`);
+    setTimeout(runCheck, CONFIG.MUTATION_DELAY);
+  }
+}).observe(document, {subtree: true, childList: true});
+
 // Executa também no carregamento inicial da página
-log("Script carregado. Acionando verificação inicial.");
-runCheck();
+log(`Script carregado. Acionando verificação inicial em ${CONFIG.INITIAL_DELAY}ms.`);
+setTimeout(runCheck, CONFIG.INITIAL_DELAY);
