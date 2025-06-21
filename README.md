@@ -141,10 +141,10 @@ window.location.replace(newUrl);
 ### Prevenção de Loop (SPA)
 ```javascript
 // Listener para navegação interna do YouTube
-document.addEventListener('yt-navigate-finish', redirectToDottedUrl);
+document.addEventListener('yt-navigate-finish', processUrl);
 
-// Cache em memória para evitar loops com o botão "voltar"
-// (ver código para detalhes)
+// Usa chrome.storage.session para detectar e quebrar loops de redirecionamento.
+// (ver código para detalhes da implementação)
 ```
 
 ## 🚨 Limitações e Considerações
