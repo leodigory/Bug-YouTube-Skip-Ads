@@ -16,10 +16,10 @@ Esta extensão foi desenvolvida baseada em uma descoberta pessoal de um bug no Y
 
 ### 🎯 Como Funciona
 
-A extensão detecta automaticamente quando você acessa um vídeo do YouTube e adiciona um ponto (`.`) na URL entre o domínio e o caminho, transformando:
-- `youtube.com/watch?v=VIDEO_ID` → `youtube.com./watch?v=VIDEO_ID`
+A extensão detecta automaticamente quando você acessa um vídeo do YouTube e adiciona um ponto (`.`) no **final** da URL, transformando:
+- `youtube.com/watch?v=VIDEO_ID` → `youtube.com/watch?v=VIDEO_ID.`
 
-Este simples truque faz com que o YouTube exiba o vídeo sem anúncios, como se você tivesse uma assinatura premium.
+Este simples truque faz com que o YouTube exiba o vídeo sem anúncios.
 
 <div align="center">
   <img src="how-it-works.svg" alt="Como a Extensão Funciona" width="800" height="400">
@@ -133,8 +133,8 @@ function isYoutubeVideo(url) {
 
 ### Adição do Ponto
 ```javascript
-// Adiciona o ponto e redireciona
-const newUrl = currentUrl.replace(".com/watch", ".com./watch");
+// Adiciona o ponto no final e redireciona
+const newUrl = currentUrl + '.';
 window.location.replace(newUrl);
 ```
 
@@ -143,8 +143,8 @@ window.location.replace(newUrl);
 // Listener para navegação interna do YouTube
 document.addEventListener('yt-navigate-finish', processUrl);
 
-// Usa chrome.storage.session para detectar e quebrar loops de redirecionamento.
-// (ver código para detalhes da implementação)
+// Usa chrome.storage.session para "lembrar" a última URL e quebrar loops.
+await chrome.storage.session.set({ [CONFIG.STORAGE_KEY]: currentUrl });
 ```
 
 ## 🚨 Limitações e Considerações

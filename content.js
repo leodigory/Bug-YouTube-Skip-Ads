@@ -1,12 +1,12 @@
 // Bug YouTube Skip Ads - Content Script
-// v1.0 (Correção de Loop de Redirecionamento)
+// v1.0 (Lógica Final e Logs Detalhados)
 
 const CONFIG = {
   // ATENÇÃO: Logs de debug estão ativados para diagnóstico.
   DEBUG: true,
   DOT_PATTERN: ".com./watch",
   NORMAL_PATTERN: ".com/watch",
-  STORAGE_KEY: 'yt-skip-ads-target' // Chave para o armazenamento da sessão
+  STORAGE_KEY: 'yt-skip-ads-last-url' // Chave para o armazenamento da sessão
 };
 
 function log(message) {
@@ -21,49 +21,47 @@ function removeDotFromUrl(url) {
 
 async function processUrl() {
   const currentUrl = window.location.href;
-  log(`Iniciando verificação. URL: ${currentUrl}`);
+  log(`Iniciando verificação na URL: ${currentUrl}`);
 
-  // Se a URL já tem o ponto, o trabalho está feito.
-  if (currentUrl.includes(CONFIG.DOT_PATTERN)) {
-    log("URL já tem o ponto. Nenhuma ação necessária.");
-    return;
-  }
-
-  // Se não for uma página de vídeo, não faz nada.
-  if (!currentUrl.includes(CONFIG.NORMAL_PATTERN)) {
-    log("Não é uma página de vídeo. Nenhuma ação necessária.");
-    return;
-  }
-
-  // --- Lógica de Prevenção de Loop ---
-  // Verifica se acabamos de ser redirecionados de volta pelo YouTube.
-  const { [CONFIG.STORAGE_KEY]: targetUrl } = await chrome.storage.session.get(CONFIG.STORAGE_KEY);
-  
-  // Se o nosso "alvo" (URL com ponto) corresponde à URL atual (sem ponto), é um loop.
-  if (targetUrl && removeDotFromUrl(targetUrl) === currentUrl) {
-    log(`Loop de redirecionamento detectado. Bloqueando novo redirecionamento.`);
-    // Limpa a chave para que a próxima navegação manual do usuário funcione.
-    await chrome.storage.session.remove(CONFIG.STORAGE_KEY);
+  // 1. Se a URL já termina com ponto, o trabalho está feito.
+  if (currentUrl.endsWith('.')) {
+    log("URL já termina com ponto. Nenhuma ação necessária.");
     return;
   }
   
-  // --- Lógica de Redirecionamento ---
-  const newUrl = currentUrl.replace(CONFIG.NORMAL_PATTERN, CONFIG.DOT_PATTERN);
-  log(`Redirecionamento necessário. Alvo: ${newUrl}`);
+  // 2. Se não for uma página de vídeo, ignora.
+  // Usamos includes('watch?v=') que é o padrão de vídeos.
+  if (!currentUrl.includes('watch?v=')) {
+    log("Não é uma página de vídeo. Ignorando.");
+    return;
+  }
 
-  // Armazena nosso alvo ANTES de redirecionar.
-  await chrome.storage.session.set({ [CONFIG.STORAGE_KEY]: newUrl });
+  // 3. Lógica de Prevenção de Loop
+  const { [CONFIG.STORAGE_KEY]: lastUrl } = await chrome.storage.session.get(CONFIG.STORAGE_KEY);
+  if (lastUrl === currentUrl) {
+    log(`Loop detectado. A URL atual é a mesma que a última processada. Bloqueando.`);
+    await chrome.storage.session.remove(CONFIG.STORAGE_KEY); // Limpa para a próxima navegação
+    return;
+  }
+
+  // 4. Se todas as checagens passaram, fazemos o redirecionamento.
+  log("Adicionando ponto na URL...");
+  const newUrl = currentUrl + '.';
   
-  // Executa o redirecionamento.
+  // Armazena a URL que estamos PRESTES a visitar para evitar o loop.
+  await chrome.storage.session.set({ [CONFIG.STORAGE_KEY]: currentUrl });
+  
+  log(`Redirecionando para a nova URL: ${newUrl}`);
   window.location.replace(newUrl);
 }
 
-// O YouTube usa navegação de SPA. Precisamos observar as mudanças.
+// Observa a navegação interna do YouTube
 document.addEventListener('yt-navigate-finish', () => {
-    log("Evento 'yt-navigate-finish' detectado.");
-    setTimeout(processUrl, 100); 
+  log("Navegação detectada ('yt-navigate-finish'). Verificando URL...");
+  // Pequeno timeout para garantir que o DOM e a URL estejam 100% atualizados.
+  setTimeout(processUrl, 100); 
 });
 
-// Executa também no carregamento inicial da página.
-log("Script injetado. Executando verificação inicial.");
+// Executa no carregamento inicial da página
+log("Script carregado. Verificação inicial.");
 processUrl();
