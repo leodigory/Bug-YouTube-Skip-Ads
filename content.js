@@ -30,8 +30,11 @@ async function runCheck() {
   }
 
   // 1. Se não for uma página de vídeo, ignora.
-  if (!currentUrl.includes('watch?v=')) {
-    log("Não é uma página de vídeo. Nenhuma ação.");
+  const isWatchPage = currentUrl.includes('watch?v=');
+  const isEmbedPage = currentUrl.includes('/embed/');
+
+  if (!isWatchPage && !isEmbedPage) {
+    log("Não é uma página de vídeo ou embed. Nenhuma ação.");
     return;
   }
   
